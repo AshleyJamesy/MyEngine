@@ -115,95 +115,21 @@
 
 #include <iostream>
 
-#include "GLEW\glew.h"
-#include "GLFW\glfw3.h"
-
 #include "mesystem\Resource.h"
+#include "mesystem\Window.h"
+
 #include "melua\lua.h"
 #include "memath\Vector2.h"
 #include "memath\Vector3.h"
 #include "memath\Matrix4.h"
+
+#include "mesystem\TaskManager.h"
 
 #include "mecontainers\StaticMap.h"
 
 #include <assert.h>
 
 #include <thread>
-
-GLFWwindow* _window;
-
-int CreateWindow(int _width, int _height, const char* _title)
-{
-	if (!glfwInit())
-		return 1;
-
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-	_window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
-
-	if (_window == nullptr)
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-		_window = glfwCreateWindow(_width, _height, _title, nullptr, nullptr);
-	}
-
-	if (_window == nullptr)
-		return 2;
-
-	glfwMakeContextCurrent(_window);
-
-	glewExperimental = GL_TRUE;
-
-	glewInit();
-
-	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
-
-	//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	glViewport(0, 0, _width, _height);
-
-	return 0;
-}
-
-void DrawQuadOutline(Vector3<float>& _Center, float _Width, float _Height, float _Line, Vector3<float>& _Colour)
-{
-	glLineWidth(_Width);
-	glColor3f(_Colour.x, _Colour.y, _Colour.z);
-
-	glBegin(GL_LINES);
-	glVertex3f(_Center.x - _Width / 2, _Center.y + _Height / 2, _Center.z);
-	glVertex3f(_Center.x + _Width / 2, _Center.y + _Height / 2, _Center.z);
-
-	glVertex3f(_Center.x + _Width / 2, _Center.y + _Height / 2, _Center.z);
-	glVertex3f(_Center.x + _Width / 2, _Center.y - _Height / 2, _Center.z);
-
-	glVertex3f(_Center.x + _Width / 2, _Center.y - _Height / 2, _Center.z);
-	glVertex3f(_Center.x - _Width / 2, _Center.y - _Height / 2, _Center.z);
-
-	glVertex3f(_Center.x - _Width / 2, _Center.y - _Height / 2, _Center.z);
-	glVertex3f(_Center.x - _Width / 2, _Center.y + _Height / 2, _Center.z);
-	glEnd();
-}
-
-static int LUA_DrawQuadOutline(lua_State* _state)
-{
-	float _x		= (float) lua_tonumber(_state, 1);
-	float _y		= (float) lua_tonumber(_state, 2);
-	float _z		= (float) lua_tonumber(_state, 3);
-	float _width	= (float) lua_tonumber(_state, 4);
-	float _height	= (float) lua_tonumber(_state, 5);
-	float _line		= (float) lua_tonumber(_state, 6);
-	float _r		= (float) lua_tonumber(_state, 7);
-	float _g		= (float) lua_tonumber(_state, 8);
-	float _b		= (float) lua_tonumber(_state, 9);
-
-	DrawQuadOutline(Vector3<float>(_x, _y, _z), _width, _height, _line, Vector3<float>(_r, _g, _b));
-
-	return 0;
-}
 
 void Reload(LuaState* _state, std::string _string)
 {
@@ -270,21 +196,12 @@ void commandline(LuaState* _state)
 
 int main()
 {
-	CreateWindow(512, 512, "");
-	
+	Window _Window = Window(512, 512, "MyEngine");
+	ThreadPool _ThreadPool;
+
 	LuaState m_LuaState;
 
 	m_LuaState.OpenLib();
-
-	lua_createtable(m_LuaState.State(), 0, 0);
-	lua_setglobal(m_LuaState.State(), "Render");
-
-	lua_getglobal(m_LuaState.State(), "Render");
-
-	lua_pushcfunction(m_LuaState.State(), LUA_DrawQuadOutline);
-	lua_setfield(m_LuaState.State(), -2, "DrawQuadOutline");
-
-	lua_pop(m_LuaState.State(), -1);
 
 	lua_createtable(m_LuaState.State(), 0, 0);
 	lua_setglobal(m_LuaState.State(), "Gamemode");
@@ -294,6 +211,7 @@ int main()
 
 	std::thread CommandThread(commandline, &m_LuaState);
 
+	//lua includes
 	m_LuaState.DoFile("hooks.lua");
 	m_LuaState.DoFile("entity.lua");
 
@@ -358,7 +276,7 @@ int main()
 		if (int _s = lua_pcall(m_LuaState.State(), 2, 0, 0) != 0)
 			LuaState::ReportErrors(m_LuaState.State(), _s);
 
-		glfwSwapBuffers(_window);
+		glfwSwapBuffers(_Window.GetWindow());
 	}
 
 	CommandThread.join();

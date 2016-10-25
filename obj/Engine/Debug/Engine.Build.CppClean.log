@@ -6,12 +6,29 @@ c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\mai
 c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\message.obj
 c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\messagebus.obj
 c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\shader.obj
+c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\camera.obj
+c:\users\ash\documents\myengine\obj\engine\debug\vc140.pdb
+c:\users\ash\documents\myengine\obj\engine\debug\vc140.idb
+c:\users\ash\documents\myengine\obj\engine\debug\camera.obj
+c:\users\ash\documents\myengine\obj\engine\debug\component.obj
+c:\users\ash\documents\myengine\obj\engine\debug\gameobject.obj
+c:\users\ash\documents\myengine\obj\engine\debug\main.obj
+c:\users\ash\documents\myengine\obj\engine\debug\message.obj
+c:\users\ash\documents\myengine\obj\engine\debug\messagebus.obj
+c:\users\ash\documents\myengine\obj\engine\debug\shader.obj
+c:\users\ash\documents\myengine\obj\engine\debug\taskmanager.obj
 c:\users\ash\documents\visual studio 2015\projects\myengine\bin\engine\win32\debug\engine.ilk
 c:\users\ash\documents\visual studio 2015\projects\myengine\bin\engine\win32\debug\engine.exe
 c:\users\ash\documents\visual studio 2015\projects\myengine\bin\engine\win32\debug\engine.pdb
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\cl.command.1.tlog
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\cl.read.1.tlog
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\cl.write.1.tlog
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\link.command.1.tlog
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\link.read.1.tlog
-c:\users\ash\documents\visual studio 2015\projects\myengine\obj\engine\debug\engine.tlog\link.write.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\main.obj.enc
+c:\users\ash\documents\myengine\bin\engine\win32\debug\engine.pdb
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\cl.command.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\cl.read.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\cl.write.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link-cvtres.read.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link-cvtres.write.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link-rc.read.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link-rc.write.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link.command.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link.read.1.tlog
+c:\users\ash\documents\myengine\obj\engine\debug\engine.tlog\link.write.1.tlog

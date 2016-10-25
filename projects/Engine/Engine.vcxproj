@@ -180,6 +180,7 @@
     <ClInclude Include="source\mecomposition\Renderer.h" />
     <ClInclude Include="source\mecontainers\StaticLinkList.h" />
     <ClInclude Include="source\mecontainers\StaticMap.h" />
+    <ClInclude Include="source\mesystem\Window.h" />
     <ClInclude Include="source\metypes\Attribute.h" />
     <ClInclude Include="source\melua\lua.h" />
     <ClInclude Include="source\metypes\Material.h" />

@@ -1,55 +1,85 @@
 #pragma once
-#include <assert.h>
 #include <mutex>
-#include <atomic>
 #include <thread>
-
-struct Task
-{
-	void* m_Function;
-};
 
 #define MYENGINE_MAX_THREADS 4
 #define MYENGINE_MAX_TASK_COUNT 64
 
+typedef void(*TaskFunction)(void);
+
+struct Task
+{
+	Task()
+	{
+
+	}
+
+	Task(TaskFunction _function)
+	{
+		m_Function = _function;
+	}
+
+	TaskFunction m_Function = nullptr;
+};
+
 class ThreadPool
 {
-	static std::mutex m_mutex;
+	std::mutex m_mutex;
 
 public:
-	static void Initialise()
+	ThreadPool()
 	{
+		m_TaskQueueCount = 0;
+
+		//Create the threads and detach
 		for (int i = 0; i < MYENGINE_MAX_THREADS; ++i)
-			m_Threads[i].detach();
-	}
-
-	static void AddTask(Task _task)
-	{
-		m_mutex.lock();
-
-		assert(m_TaskQueueCount < MAX_TASK_COUNT);
-
-		m_Tasks[m_TaskQueueCount++] = _task;
-		++m_TaskCount;
-
-		m_mutex.unlock();
-	}
-
-	void RunTasks()
-	{
-		while (m_TaskCount > 0)
 		{
-
+			m_Threads[i] = new std::thread(DoTasks, this);
+			m_Threads[i]->detach();
 		}
 	}
 
-	static void Run()
+	void AddTask(Task _task)
 	{
+		m_mutex.lock();
 
+		//Add the new task
+		if(m_TaskQueueCount < MYENGINE_MAX_TASK_COUNT)
+			m_Tasks[m_TaskQueueCount++] = _task;
+
+		m_mutex.unlock();
+	}
+	
+	static void DoTasks(ThreadPool* _threadpool)
+	{
+		printf("Thread[%d]	Created\n", std::this_thread::get_id());
+
+		//Keep this here so we don't keep making a new one in the while loop
+		Task _MyTask;
+
+		while (true)
+		{
+			_threadpool->m_mutex.lock();
+
+			if(_threadpool->m_TaskQueueCount > 0)
+			{
+				//Pop off Task
+				_threadpool->m_TaskQueueCount--;
+				_MyTask = _threadpool->m_Tasks[_threadpool->m_TaskQueueCount];
+
+				_threadpool->m_mutex.unlock();
+
+				//Run the function
+				if(_MyTask.m_Function != nullptr)
+					_MyTask.m_Function();
+			}
+			else
+				_threadpool->m_mutex.unlock();
+		}
 	}
 
-	static unsigned int	m_TaskQueueCount;
-	static unsigned int	m_TaskCount;
-	static std::thread	m_Threads[MYENGINE_MAX_THREADS];
-	static Task			m_Tasks[MYENGINE_MAX_TASK_COUNT];
+	unsigned int	m_TaskQueueCount;
+	std::thread*	m_Threads[MYENGINE_MAX_THREADS];
+	Task			m_Tasks[MYENGINE_MAX_TASK_COUNT];
+
 };

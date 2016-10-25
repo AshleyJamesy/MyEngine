@@ -1,8 +1,6 @@
 --Entities
 dofile("myentity.lua");
 
-A = Entity:Create("MyEntity");
-
 function Gamemode:Initialise()
 	
 end
